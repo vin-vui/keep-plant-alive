@@ -1,0 +1,83 @@
+{
+  "app": {
+    "name": "Keep Plant Alive",
+    "tagline": "Never let your plants die of thirst"
+  },
+  "nav": {
+    "home": "My Plants",
+    "add": "Add",
+    "settings": "Settings"
+  },
+  "plants": {
+    "empty_title": "No plants yet",
+    "empty_desc": "Add your first plant to get started",
+    "add_first": "Add a plant",
+    "water_now": "Water",
+    "watered": "Watered!",
+    "last_watered": "Last watered",
+    "next_watering": "Next watering",
+    "interval_label": "Frequency",
+    "interval_days": "{n} day | {n} days",
+    "name": "Name",
+    "scientific_name": "Scientific name",
+    "family": "Family",
+    "delete": "Delete",
+    "delete_confirm": "Delete this plant?",
+    "urgency": {
+      "overdue": "Overdue",
+      "today": "Today",
+      "soon": "Soon",
+      "ok": "OK"
+    },
+    "skip_rain": "Skipped (rain)"
+  },
+  "identify": {
+    "title": "Identify",
+    "take_photo": "Take a photo",
+    "choose_file": "Choose an image",
+    "identifying": "Identifying…",
+    "choose_result": "Which plant is this?",
+    "score": "{n}% match",
+    "select": "Select",
+    "not_found": "Plant not recognized",
+    "error": "Identification error",
+    "manual": "Enter manually",
+    "confirm_name": "Plant name",
+    "interval_hint": "Recommended watering",
+    "add_plant": "Add plant"
+  },
+  "weather": {
+    "rain_24h": "{mm} mm (24h)",
+    "rain_48h": "{mm} mm forecast",
+    "temp": "{t}°C",
+    "no_location": "Location not set",
+    "skip_active": "Watering skipped: it rained"
+  },
+  "settings": {
+    "title": "Settings",
+    "location": "Location",
+    "detect_location": "Detect my location",
+    "location_detected": "Location detected",
+    "location_name": "City name (optional)",
+    "rain_threshold": "Rain threshold (mm)",
+    "rain_threshold_hint": "Skip watering if rain exceeds this amount",
+    "notifications": "Notifications",
+    "enable_notifications": "Enable reminders",
+    "theme": "Theme",
+    "theme_light": "Light",
+    "theme_dark": "Dark",
+    "theme_system": "System",
+    "language": "Language",
+    "saved": "Settings saved"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "loading": "Loading…",
+    "error": "Error",
+    "close": "Close",
+    "back": "Back",
+    "days": "d"
+  }
+}

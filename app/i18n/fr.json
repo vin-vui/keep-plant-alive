@@ -1,0 +1,83 @@
+{
+  "app": {
+    "name": "Keep Plant Alive",
+    "tagline": "Ne laissez plus vos plantes mourir de soif"
+  },
+  "nav": {
+    "home": "Mes plantes",
+    "add": "Ajouter",
+    "settings": "Réglages"
+  },
+  "plants": {
+    "empty_title": "Aucune plante",
+    "empty_desc": "Ajoutez votre première plante pour commencer",
+    "add_first": "Ajouter une plante",
+    "water_now": "Arroser",
+    "watered": "Arrosé !",
+    "last_watered": "Dernier arrosage",
+    "next_watering": "Prochain arrosage",
+    "interval_label": "Fréquence",
+    "interval_days": "{n} jour | {n} jours",
+    "name": "Nom",
+    "scientific_name": "Nom scientifique",
+    "family": "Famille",
+    "delete": "Supprimer",
+    "delete_confirm": "Supprimer cette plante ?",
+    "urgency": {
+      "overdue": "En retard",
+      "today": "Aujourd'hui",
+      "soon": "Bientôt",
+      "ok": "OK"
+    },
+    "skip_rain": "Sauté (pluie)"
+  },
+  "identify": {
+    "title": "Identifier",
+    "take_photo": "Prendre une photo",
+    "choose_file": "Choisir une image",
+    "identifying": "Identification…",
+    "choose_result": "Quelle est votre plante ?",
+    "score": "{n}% de correspondance",
+    "select": "Choisir",
+    "not_found": "Plante non reconnue",
+    "error": "Erreur d'identification",
+    "manual": "Saisir manuellement",
+    "confirm_name": "Nom de la plante",
+    "interval_hint": "Arrosage recommandé",
+    "add_plant": "Ajouter la plante"
+  },
+  "weather": {
+    "rain_24h": "{mm} mm (24h)",
+    "rain_48h": "{mm} mm prévus",
+    "temp": "{t}°C",
+    "no_location": "Localisation non configurée",
+    "skip_active": "Arrosage ignoré : il a plu"
+  },
+  "settings": {
+    "title": "Réglages",
+    "location": "Localisation",
+    "detect_location": "Détecter ma position",
+    "location_detected": "Position détectée",
+    "location_name": "Nom de la ville (optionnel)",
+    "rain_threshold": "Seuil de pluie (mm)",
+    "rain_threshold_hint": "Ignorer l'arrosage si la pluie dépasse ce seuil",
+    "notifications": "Notifications",
+    "enable_notifications": "Activer les rappels",
+    "theme": "Thème",
+    "theme_light": "Clair",
+    "theme_dark": "Sombre",
+    "theme_system": "Système",
+    "language": "Langue",
+    "saved": "Réglages enregistrés"
+  },
+  "common": {
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "save": "Enregistrer",
+    "loading": "Chargement…",
+    "error": "Erreur",
+    "close": "Fermer",
+    "back": "Retour",
+    "days": "j"
+  }
+}
