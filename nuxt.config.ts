@@ -32,7 +32,7 @@ export default defineNuxtConfig({
 
   pwa: {
     strategies: 'injectManifest',
-    srcDir: 'app/sw',
+    srcDir: 'sw',
     filename: 'sw.ts',
     registerType: 'prompt',
     manifest: {
