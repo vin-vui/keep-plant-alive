@@ -29,7 +29,11 @@
       "soon": "Soon",
       "ok": "OK"
     },
-    "skip_rain": "Skipped (rain)"
+    "skip_rain": "Skipped (rain)",
+    "added": "Plant added!",
+    "outdoor": "Outdoor",
+    "indoor": "Indoor",
+    "location": "Location"
   },
   "identify": {
     "title": "Identify",

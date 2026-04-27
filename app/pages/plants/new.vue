@@ -76,6 +76,34 @@
             </option>
           </select>
         </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            {{ $t('plants.location') }}
+          </label>
+          <div class="flex gap-2">
+            <button
+              type="button"
+              class="flex-1 py-2 rounded-xl text-sm font-medium transition-colors"
+              :class="form.isOutdoor
+                ? 'bg-brand-600 text-white'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'"
+              @click="form.isOutdoor = true"
+            >
+              🌤️ {{ $t('plants.outdoor') }}
+            </button>
+            <button
+              type="button"
+              class="flex-1 py-2 rounded-xl text-sm font-medium transition-colors"
+              :class="!form.isOutdoor
+                ? 'bg-brand-600 text-white'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'"
+              @click="form.isOutdoor = false"
+            >
+              🏠 {{ $t('plants.indoor') }}
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="flex gap-3 pt-2">
@@ -86,12 +114,12 @@
           {{ $t('common.back') }}
         </button>
         <button
-          class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-semibold transition-colors flex items-center justify-center gap-2"
+          class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-semibold transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           :disabled="!form.name.trim() || saving"
           @click="savePlant"
         >
           <AppSpinner v-if="saving" size="sm" color="text-white" />
-          {{ $t('identify.add_plant') }}
+          {{ saving ? $t('common.loading') : $t('identify.add_plant') }}
         </button>
       </div>
     </div>
@@ -120,7 +148,8 @@ const form = reactive({
   scientificName: null as string | null,
   commonName: null as string | null,
   family: null as string | null,
-  intervalDays: 7
+  intervalDays: 7,
+  isOutdoor: true
 })
 
 function onPhotoReady({ full, thumbnail }: { full: string; thumbnail: string }) {
@@ -133,9 +162,11 @@ async function identify() {
   const results = await identifyPlant(photoFull.value)
   if (results.length > 0) {
     step.value = 'results'
-  } else {
+  } else if (!identifyError.value) {
+    // API answered but found nothing → manual entry
     goManual()
   }
+  // else: API error → stay on capture, error message is visible
 }
 
 function onResultSelected(result: PlantIdResult) {
@@ -167,12 +198,13 @@ async function savePlant() {
       family: form.family,
       photoDataUrl: photoFull.value,
       thumbnailDataUrl: photoThumbnail.value,
+      isOutdoor: form.isOutdoor,
       wateringProfile: { intervalDays: form.intervalDays, preferredTimeHour: 8 },
       lastWateredAt: now,
       nextWateringAt: computeNextWatering(now, form.intervalDays),
       skippedDueToRain: false
     })
-    showToast(`${form.name} ${t('plants.watered')}`)
+    showToast(t('plants.added'))
     router.push('/')
   } finally {
     saving.value = false

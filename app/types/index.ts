@@ -14,6 +14,7 @@ export interface Plant {
   wateringProfile: WateringProfile
   lastWateredAt: string | null
   nextWateringAt: string | null
+  isOutdoor: boolean
   skippedDueToRain: boolean
   createdAt: string
   updatedAt: string

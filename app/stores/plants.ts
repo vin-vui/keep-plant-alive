@@ -23,7 +23,7 @@ export const usePlantsStore = defineStore('plants', {
   actions: {
     async loadFromIDB() {
       const stored = await get<Plant[]>(IDB_KEY)
-      if (stored) this.plants = stored
+      if (stored) this.plants = stored.map(p => ({ isOutdoor: true, ...p }))
       this.loaded = true
     },
 

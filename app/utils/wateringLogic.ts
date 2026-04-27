@@ -3,8 +3,10 @@ import { differenceInCalendarDays, addDays } from 'date-fns'
 
 export function shouldSkipDueToRain(
   weather: WeatherSnapshot | null,
-  thresholdMm = 5
+  thresholdMm = 5,
+  isOutdoor = true
 ): boolean {
+  if (!isOutdoor) return false
   if (!weather) return false
   return weather.rainLast24hMm >= thresholdMm || weather.rainForecast48hMm >= thresholdMm
 }

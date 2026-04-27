@@ -20,7 +20,14 @@ export function useWeather() {
     try {
       const apiKey = config.public.openweatherApiKey
       const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${encodeURIComponent(apiKey)}&units=metric&exclude=minutely,alerts`
-      const res = await fetch(url)
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 8000)
+      let res: Response
+      try {
+        res = await fetch(url, { signal: controller.signal })
+      } finally {
+        clearTimeout(timeoutId)
+      }
       if (!res.ok) throw new Error(`OpenWeather ${res.status}`)
       const data = await res.json()
 

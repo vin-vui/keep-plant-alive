@@ -19,10 +19,14 @@ export function usePlantId() {
       form.append('organs', 'auto')
 
       const apiKey = config.public.plantnetApiKey
+      if (!apiKey || apiKey === 'your_plantnet_key_here') {
+        throw new Error('Clé API PlantNet manquante — configure NUXT_PUBLIC_PLANTNET_API_KEY dans .env')
+      }
       const url = `https://my-api.plantnet.org/v2/identify/all?api-key=${encodeURIComponent(apiKey)}&include-related-images=false`
       const res = await fetch(url, { method: 'POST', body: form })
 
       if (!res.ok) {
+        if (res.status === 401) throw new Error('Clé API PlantNet invalide (401) — vérifie NUXT_PUBLIC_PLANTNET_API_KEY dans .env')
         const body = await res.text().catch(() => '')
         throw new Error(`PlantNet ${res.status}: ${body}`)
       }

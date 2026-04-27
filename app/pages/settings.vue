@@ -137,15 +137,31 @@ async function detectLocation() {
   try {
     const pos = await settings.detectLocation()
     if (pos) {
-      weatherLoading.value = true
-      await fetchWeather(pos.lat, pos.lon)
-      weatherLoading.value = false
       showToast(t('settings.location_detected'))
+      // Reverse geocoding and weather run in background — don't block the button
+      resolveCity(pos.lat, pos.lon)
+      weatherLoading.value = true
+      fetchWeather(pos.lat, pos.lon).finally(() => { weatherLoading.value = false })
     }
   } finally {
     detectingLocation.value = false
-    weatherLoading.value = false
   }
+}
+
+async function resolveCity(lat: number, lon: number) {
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`,
+      { headers: { 'Accept-Language': locale.value }, signal: AbortSignal.timeout(6000) }
+    )
+    if (!res.ok) return
+    const data = await res.json()
+    const city = data.address?.city ?? data.address?.town ?? data.address?.village ?? data.address?.county ?? ''
+    if (city) {
+      locationName.value = city
+      await settings.update({ locationName: city })
+    }
+  } catch {}
 }
 
 async function saveLocationName() {

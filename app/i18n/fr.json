@@ -29,7 +29,11 @@
       "soon": "Bientôt",
       "ok": "OK"
     },
-    "skip_rain": "Sauté (pluie)"
+    "skip_rain": "Sauté (pluie)",
+    "added": "Plante ajoutée !",
+    "outdoor": "Extérieur",
+    "indoor": "Intérieur",
+    "location": "Emplacement"
   },
   "identify": {
     "title": "Identifier",

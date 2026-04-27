@@ -26,12 +26,7 @@ export default defineNuxtConfig({
       { code: 'en', name: 'English', file: 'en.json' }
     ],
     defaultLocale: 'fr',
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'i18n_redirected',
-      redirectOn: 'root',
-      fallbackLocale: 'fr'
-    }
+    detectBrowserLanguage: false
   },
 
   pwa: {

@@ -15,6 +15,13 @@
         🌱
       </div>
 
+      <!-- Indoor/outdoor badge -->
+      <div class="absolute top-2 left-2">
+        <span class="text-xs bg-white/80 dark:bg-gray-900/80 rounded-full px-1.5 py-0.5">
+          {{ plant.isOutdoor ? '🌤️' : '🏠' }}
+        </span>
+      </div>
+
       <!-- Watering ring overlay -->
       <div class="absolute bottom-2 right-2">
         <WateringRing :progress="ringProgress" :color="ringColor" :size="40" />

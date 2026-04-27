@@ -26,7 +26,8 @@ const { t } = useI18n()
 const sortedPlants = computed(() => plantsStore.sortedPlants)
 
 const rainSkipActive = computed(() =>
-  shouldSkipDueToRain(settingsStore.weatherSnapshot, settingsStore.rainSkipThresholdMm)
+  plantsStore.plants.some(p => p.isOutdoor) &&
+  shouldSkipDueToRain(settingsStore.weatherSnapshot, settingsStore.rainSkipThresholdMm, true)
 )
 
 async function handleWater(plantId: string) {
