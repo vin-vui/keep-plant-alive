@@ -6,7 +6,7 @@
         v-if="plant.thumbnailDataUrl"
         :src="plant.thumbnailDataUrl"
         :alt="plant.name"
-        class="w-full h-full object-cover opacity-90"
+        class="w-full h-full object-cover"
       />
       <div v-else class="w-full h-full flex items-center justify-center select-none">
         <Icon name="streamline:sprout" class="text-5xl" :style="{ color: 'var(--c-border)' }" />

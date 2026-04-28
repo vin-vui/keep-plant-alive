@@ -1,5 +1,5 @@
-const MAX_FULL_SIZE = 1024
-const THUMBNAIL_SIZE = 150
+const MAX_FULL_SIZE = 1600
+const THUMBNAIL_SIZE = 600
 
 function resizeToDataUrl(file: File, maxSize: number): Promise<string> {
   return new Promise((resolve, reject) => {

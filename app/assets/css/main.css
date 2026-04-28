@@ -229,8 +229,8 @@
   50%       { border-color: #39ff14; box-shadow: 0 0 16px #39ff14, 0 0 30px rgba(57,255,20,0.25); }
 }
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* ─── KAWAII overrides ───────────────────────────────────── */
@@ -259,8 +259,8 @@
   50%       { box-shadow: 0 6px 25px rgba(224, 200, 240, 0.7); }
 }
 @keyframes kawaii-fade-in {
-  from { opacity: 0; transform: translateY(10px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* ─── Theme toggle button ────────────────────────────────── */
