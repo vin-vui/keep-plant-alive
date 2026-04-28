@@ -6,9 +6,19 @@
         class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4"
         @click.self="$emit('update:modelValue', false)"
       >
-        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="$emit('update:modelValue', false)" />
-        <div class="relative w-full sm:max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden">
-          <div v-if="title" class="px-6 pt-5 pb-3 font-semibold text-lg text-gray-900 dark:text-gray-100">
+        <div
+          class="absolute inset-0 backdrop-blur-sm"
+          :style="{ background: 'rgba(0,0,0,0.4)' }"
+          @click="$emit('update:modelValue', false)"
+        />
+        <div
+          class="relative w-full sm:max-w-md rounded-2xl shadow-2xl overflow-hidden neon-border fade-in"
+          :style="{ background: 'var(--c-card)' }"
+        >
+          <div
+            v-if="title"
+            class="px-6 pt-5 pb-3 font-semibold text-lg uppercase tracking-widest neon-text"
+          >
             {{ title }}
           </div>
           <div class="px-6 pb-6">

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+  <div class="min-h-screen fade-in">
     <AppShell>
       <NuxtPage />
     </AppShell>
@@ -9,6 +9,7 @@
 
 <script setup lang="ts">
 const settings = useSettingsStore()
+useThemeMode() // initialise theme class on <html> on first load
 
 const prefersDark = ref(import.meta.client
   ? window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -41,7 +42,7 @@ useHead({
     { name: 'theme-color', content: '#16a34a' }
   ],
   link: [
-    { rel: 'icon', type: 'image/svg+xml', href: '/icons/favicon.svg' },
+    { rel: 'icon', type: 'image/png', href: '/icons/favicon.png' },
     { rel: 'apple-touch-icon', href: '/icons/pwa-192x192.png' }
   ]
 })

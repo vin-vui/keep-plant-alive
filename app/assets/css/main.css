@@ -1,28 +1,325 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Share+Tech+Mono&family=Nunito:wght@400;500;600;700;800&display=swap');
 
 @custom-variant dark (&:is(.dark, .dark *));
 
 @theme {
-  --color-brand-50:  #f0fdf4;
-  --color-brand-100: #dcfce7;
-  --color-brand-200: #bbf7d0;
-  --color-brand-300: #86efac;
-  --color-brand-400: #4ade80;
-  --color-brand-500: #22c55e;
-  --color-brand-600: #16a34a;
-  --color-brand-700: #15803d;
-  --color-brand-800: #166534;
-  --color-brand-900: #14532d;
+  --color-brand-50:  #051405;
+  --color-brand-100: #0a2a0a;
+  --color-brand-200: #0d400d;
+  --color-brand-300: #1a6b1a;
+  --color-brand-400: #00ffaa;
+  --color-brand-500: #39ff14;
+  --color-brand-600: #39ff14;
+  --color-brand-700: #2dd10f;
+  --color-brand-800: #20a00a;
+  --color-brand-900: #0d4005;
 
-  --font-family-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-family-sans: "Orbitron", "Share Tech Mono", system-ui, sans-serif;
+  --font-family-mono: "Share Tech Mono", monospace;
 }
 
+/* ─── CYBER theme (default) ──────────────────────────────── */
+:root,
+.theme-cyber {
+  /* Colors */
+  --c-bg:            #0a0f0a;
+  --c-glass:         rgba(10, 15, 10, 0.93);
+  --c-card:          #0d1a0d;
+  --c-deep:          #051405;
+  --c-text:          #e0ffe0;
+  --c-muted:         #4a7a4a;
+  --c-faint:         #2a5a2a;
+  --c-border:        rgba(57, 255, 20, 0.25);
+  --c-border-lo:     rgba(57, 255, 20, 0.18);
+
+  /* Accent */
+  --c-accent-bg:     rgba(57, 255, 20, 0.08);
+  --c-accent-border: #39ff14;
+  --c-accent-text:   #39ff14;
+  --c-accent-shadow: 0 0 10px rgba(57, 255, 20, 0.25);
+  --c-accent2-text:  #00ffaa;
+
+  /* Ghost / secondary buttons */
+  --c-ghost-border:  rgba(57, 255, 20, 0.25);
+  --c-ghost-text:    #4a7a4a;
+
+  /* Error state */
+  --c-error:         #ff3939;
+  --c-error-bg:      #1a0505;
+  --c-error-border:  #ff3939;
+  --c-error-shadow:  0 0 12px rgba(255, 57, 57, 0.25);
+
+  /* Shadows */
+  --shadow-card:      none;
+  --shadow-hover:     0 0 12px rgba(57, 255, 20, 0.4), 0 0 30px rgba(57, 255, 20, 0.13);
+  --shadow-glow:      0 0 8px #39ff14, 0 0 20px rgba(57, 255, 20, 0.25);
+  --shadow-text:      0 0 10px #39ff14, 0 0 20px rgba(57, 255, 20, 0.38);
+  --shadow-header:    0 1px 20px rgba(57, 255, 20, 0.13);
+
+  /* Ring */
+  --c-ring-track:    #0d2a0d;
+
+  /* Urgency badges */
+  --urgency-overdue-bg:     #1a0505;
+  --urgency-overdue-border: #ff3939;
+  --urgency-overdue-text:   #ff6060;
+  --urgency-today-bg:       #1a1000;
+  --urgency-today-border:   #ffaa00;
+  --urgency-today-text:     #ffcc44;
+  --urgency-soon-bg:        #0f1400;
+  --urgency-soon-border:    #aaff00;
+  --urgency-soon-text:      #ccff44;
+  --urgency-ok-bg:          #051405;
+  --urgency-ok-border:      rgba(57, 255, 20, 0.38);
+  --urgency-ok-text:        #39ff14;
+
+  /* Typography */
+  --font-ui:     'Orbitron', 'Share Tech Mono', system-ui, sans-serif;
+  --font-data:   'Share Tech Mono', monospace;
+  --tracking:    0.08em;
+
+  /* Motion */
+  --hover-transform: none;
+  --transition:      border-color 0.2s, box-shadow 0.2s;
+}
+
+/* ─── KAWAII theme ───────────────────────────────────────── */
+.theme-kawaii {
+  /* Colors */
+  --c-bg:            #fdf6ff;
+  --c-glass:         rgba(253, 246, 255, 0.92);
+  --c-card:          #ffffff;
+  --c-deep:          #f5eeff;
+  --c-text:          #5c4a6e;
+  --c-muted:         #c9b8d8;
+  --c-faint:         #d4c4e4;
+  --c-border:        #e0c8f0;
+  --c-border-lo:     #ead8f8;
+
+  /* Accent (mint) */
+  --c-accent-bg:     rgba(181, 234, 215, 0.3);
+  --c-accent-border: #b5ead7;
+  --c-accent-text:   #3a7a5e;
+  --c-accent-shadow: 0 4px 15px rgba(181, 234, 215, 0.6);
+  --c-accent2-text:  #c0607a;
+
+  /* Ghost / secondary buttons */
+  --c-ghost-border:  #e0c8f0;
+  --c-ghost-text:    #c9b8d8;
+
+  /* Error state */
+  --c-error:         #e05070;
+  --c-error-bg:      #fff0f3;
+  --c-error-border:  #ffb3c6;
+  --c-error-shadow:  0 4px 15px rgba(255, 179, 198, 0.4);
+
+  /* Shadows */
+  --shadow-card:     0 4px 20px rgba(224, 200, 240, 0.45);
+  --shadow-hover:    0 8px 30px rgba(224, 200, 240, 0.7);
+  --shadow-glow:     0 4px 20px rgba(224, 200, 240, 0.5);
+  --shadow-text:     none;
+  --shadow-header:   0 2px 20px rgba(224, 200, 240, 0.35);
+
+  /* Ring */
+  --c-ring-track:    #f0e8f8;
+
+  /* Urgency badges */
+  --urgency-overdue-bg:     #fff0f3;
+  --urgency-overdue-border: #ffb3c6;
+  --urgency-overdue-text:   #d05070;
+  --urgency-today-bg:       #fff8e7;
+  --urgency-today-border:   #ffd166;
+  --urgency-today-text:     #a07020;
+  --urgency-soon-bg:        #f0fff8;
+  --urgency-soon-border:    #b5ead7;
+  --urgency-soon-text:      #3a7a5e;
+  --urgency-ok-bg:          #f0fff8;
+  --urgency-ok-border:      #b5ead7;
+  --urgency-ok-text:        #3a7a5e;
+
+  /* Typography */
+  --font-ui:     'Nunito', 'Quicksand', system-ui, sans-serif;
+  --font-data:   'Nunito', system-ui, sans-serif;
+  --tracking:    0.01em;
+
+  /* Motion */
+  --hover-transform: scale(1.02);
+  --transition:      box-shadow 0.3s, transform 0.3s;
+}
+
+/* ─── Base styles ────────────────────────────────────────── */
 @layer base {
-  * {
-    -webkit-tap-highlight-color: transparent;
-  }
+  * { -webkit-tap-highlight-color: transparent; }
 
   html {
-    font-family: var(--font-family-sans);
+    font-family: var(--font-ui);
+    background-color: var(--c-bg);
+    color: var(--c-text);
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
+
+  /* Scanlines — CYBER only */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 3px,
+      rgba(0, 0, 0, 0.08) 3px,
+      rgba(0, 0, 0, 0.08) 4px
+    );
+  }
+  .theme-kawaii body::after { display: none; }
 }
+
+/* ─── Utility classes ────────────────────────────────────── */
+.neon-border {
+  border: 1px solid var(--c-accent-border);
+  box-shadow: var(--shadow-glow);
+}
+.neon-border-teal {
+  border: 1px solid var(--c-accent2-text);
+  box-shadow: var(--shadow-glow);
+}
+.neon-text {
+  color: var(--c-accent-text);
+  text-shadow: var(--shadow-text);
+}
+.neon-text-teal {
+  color: var(--c-accent2-text);
+  text-shadow: var(--shadow-text);
+}
+.neon-glow {
+  animation: neon-pulse 2.5s ease-in-out infinite;
+}
+.neon-text-glow {
+  animation: text-pulse 2.5s ease-in-out infinite;
+}
+.neon-card {
+  background: var(--c-card);
+  border: 1px solid var(--c-border);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
+}
+.neon-card:hover {
+  border-color: var(--c-accent-border);
+  box-shadow: var(--shadow-hover);
+  transform: var(--hover-transform);
+}
+.fade-in {
+  animation: fade-in 0.4s ease-out both;
+}
+
+/* ─── CYBER animations ───────────────────────────────────── */
+@keyframes neon-pulse {
+  0%, 100% { box-shadow: 0 0 6px #39ff14, 0 0 14px rgba(57,255,20,0.25); }
+  50%       { box-shadow: 0 0 12px #39ff14, 0 0 30px rgba(57,255,20,0.4), 0 0 50px rgba(57,255,20,0.13); }
+}
+@keyframes text-pulse {
+  0%, 100% { text-shadow: 0 0 8px #39ff14, 0 0 20px rgba(57,255,20,0.38); }
+  50%       { text-shadow: 0 0 16px #39ff14, 0 0 40px rgba(57,255,20,0.5); }
+}
+@keyframes border-glow-pulse {
+  0%, 100% { border-color: #39ff14; box-shadow: 0 0 6px rgba(57,255,20,0.38); }
+  50%       { border-color: #39ff14; box-shadow: 0 0 16px #39ff14, 0 0 30px rgba(57,255,20,0.25); }
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── KAWAII overrides ───────────────────────────────────── */
+.theme-kawaii .neon-glow {
+  animation: kawaii-float 3s ease-in-out infinite;
+  box-shadow: var(--shadow-glow);
+}
+.theme-kawaii .neon-text-glow {
+  animation: kawaii-float 3s ease-in-out infinite;
+  text-shadow: none;
+}
+.theme-kawaii .fade-in {
+  animation: kawaii-fade-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.theme-kawaii .uppercase { text-transform: none !important; }
+.theme-kawaii .tracking-widest,
+.theme-kawaii .tracking-wider,
+.theme-kawaii .tracking-wide { letter-spacing: 0.02em !important; }
+
+@keyframes kawaii-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+@keyframes kawaii-pulse {
+  0%, 100% { box-shadow: 0 4px 15px rgba(224, 200, 240, 0.4); }
+  50%       { box-shadow: 0 6px 25px rgba(224, 200, 240, 0.7); }
+}
+@keyframes kawaii-fade-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ─── Theme toggle button ────────────────────────────────── */
+.theme-toggle {
+  font-size: 0.6rem;
+  padding: 3px 9px;
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: var(--font-data);
+  color: var(--c-accent-text);
+  background: var(--c-accent-bg);
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  letter-spacing: 0.06em;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+.theme-cyber .theme-toggle:hover {
+  border-color: var(--c-accent-border);
+  box-shadow: var(--c-accent-shadow);
+}
+.theme-kawaii .theme-toggle {
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.theme-kawaii .theme-toggle:hover {
+  box-shadow: var(--shadow-hover);
+  transform: scale(1.04);
+}
+
+/* ─── Input/select focus ring ────────────────────────────── */
+.field-input {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  border-radius: 0.75rem;
+  background: var(--c-deep);
+  border: 1px solid var(--c-border);
+  color: var(--c-text);
+  font-family: var(--font-data);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.field-input:focus { border-color: var(--c-accent-border); }
+.theme-kawaii .field-input { border-radius: 1rem; box-shadow: var(--shadow-card); }
+
+/* ─── Nav active/inactive ────────────────────────────────── */
+.nav-active  { color: var(--c-accent-text); }
+.nav-inactive { color: var(--c-muted); }
+.nav-inactive:hover { color: var(--c-text); }
+
+.theme-cyber .nav-active {
+  text-shadow: 0 0 8px var(--c-accent-text);
+  filter: drop-shadow(0 0 4px var(--c-accent-text));
+}
+.theme-kawaii .nav-active { font-weight: 700; }
+
+/* ─── Tailwind brand overrides for kawaii ────────────────── */
+.theme-kawaii .text-brand-600,
+.theme-kawaii .text-brand-500 { color: var(--c-accent-text) !important; }

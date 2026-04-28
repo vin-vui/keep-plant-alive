@@ -5,12 +5,17 @@
         <div
           v-for="toast in toasts"
           :key="toast.id"
-          class="pointer-events-auto max-w-sm w-full px-4 py-3 rounded-xl shadow-lg text-sm font-medium flex items-center gap-2"
-          :class="toast.type === 'error'
-            ? 'bg-red-600 text-white'
-            : 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'"
+          class="pointer-events-auto max-w-sm w-full px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2 uppercase tracking-wider"
+          :style="toast.type === 'error'
+            ? `background:var(--c-error-bg);border:1px solid var(--c-error-border);color:var(--c-error);box-shadow:var(--c-error-shadow)`
+            : `background:var(--c-deep);border:1px solid var(--c-accent-border);color:var(--c-accent-text);box-shadow:var(--c-accent-shadow)`"
         >
-          <span>{{ toast.type === 'error' ? '⚠️' : '✓' }}</span>
+          <Icon
+            :name="toast.type === 'error'
+              ? 'streamline:interface-alert-warning-triangle-frame-alert-warning-triangle-exclamation-caution'
+              : 'streamline:check'"
+            class="shrink-0"
+          />
           <span>{{ toast.message }}</span>
         </div>
       </TransitionGroup>
@@ -30,7 +35,6 @@ function show(message: string, type: Toast['type'] = 'success') {
   setTimeout(() => { toasts.value = toasts.value.filter(t => t.id !== id) }, 3000)
 }
 
-// Provide globally via nuxt plugin pattern
 if (import.meta.client) {
   (window as any).__appToast = show
 }

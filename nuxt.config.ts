@@ -17,7 +17,8 @@ export default defineNuxtConfig({
   modules: [
     '@vite-pwa/nuxt',
     '@nuxtjs/i18n',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    '@nuxt/icon'
   ],
 
   i18n: {
@@ -39,7 +40,7 @@ export default defineNuxtConfig({
       short_name: 'PlantCare',
       description: 'Gérez l\'arrosage de vos plantes',
       theme_color: '#16a34a',
-      background_color: '#ffffff',
+      background_color: '#121212',
       display: 'standalone',
       start_url: '/',
       id: '/',

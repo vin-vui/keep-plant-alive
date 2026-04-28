@@ -67,6 +67,7 @@
     "rain_threshold_hint": "Skip watering if rain exceeds this amount",
     "notifications": "Notifications",
     "enable_notifications": "Enable reminders",
+    "visual_mode": "Appearance",
     "theme": "Theme",
     "theme_light": "Light",
     "theme_dark": "Dark",

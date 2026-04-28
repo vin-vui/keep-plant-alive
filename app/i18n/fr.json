@@ -67,6 +67,7 @@
     "rain_threshold_hint": "Ignorer l'arrosage si la pluie dépasse ce seuil",
     "notifications": "Notifications",
     "enable_notifications": "Activer les rappels",
+    "visual_mode": "Apparence",
     "theme": "Thème",
     "theme_light": "Clair",
     "theme_dark": "Sombre",
