@@ -206,6 +206,8 @@ async function savePlant() {
     })
     showToast(t('plants.added'))
     router.push('/')
+  } catch (e: any) {
+    showToast(e?.message ?? t('common.error'), 'error')
   } finally {
     saving.value = false
   }

@@ -1,9 +1,18 @@
 <template>
   <div>
+    <!-- Top bar: title + weather -->
+    <div class="flex items-center justify-between px-4 pt-10 pb-2">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl" aria-hidden>🌱</span>
+        <h1 class="text-xl font-bold text-gray-900 dark:text-gray-100">{{ $t('nav.home') }}</h1>
+      </div>
+      <WeatherBadge />
+    </div>
+
     <!-- Rain skip banner -->
     <div
       v-if="rainSkipActive"
-      class="mx-4 mt-4 px-4 py-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl flex items-center gap-2 text-sm text-blue-700 dark:text-blue-300"
+      class="mx-4 mt-1 px-4 py-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl flex items-center gap-2 text-sm text-blue-700 dark:text-blue-300"
     >
       <span>🌧️</span>
       <span>{{ $t('weather.skip_active') }}</span>
@@ -35,10 +44,7 @@ async function handleWater(plantId: string) {
   showToast(t('plants.watered'))
 }
 
-// Refresh weather in background on mount
 onMounted(() => {
-  if (settingsStore.locationLat !== null) {
-    refreshWeather()
-  }
+  if (settingsStore.locationLat !== null) refreshWeather()
 })
 </script>

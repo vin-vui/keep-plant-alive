@@ -22,7 +22,7 @@ export function usePlantId() {
       if (!apiKey || apiKey === 'your_plantnet_key_here') {
         throw new Error('Clé API PlantNet manquante — configure NUXT_PUBLIC_PLANTNET_API_KEY dans .env')
       }
-      const url = `https://my-api.plantnet.org/v2/identify/all?api-key=${encodeURIComponent(apiKey)}&include-related-images=false`
+      const url = `https://my-api.plantnet.org/v2/identify/all?api-key=${encodeURIComponent(apiKey)}&include-related-images=true`
       const res = await fetch(url, { method: 'POST', body: form })
 
       if (!res.ok) {

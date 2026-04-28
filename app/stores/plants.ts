@@ -28,8 +28,9 @@ export const usePlantsStore = defineStore('plants', {
     },
 
     async persist() {
-      // Photos saved separately — strip to avoid per-key size limits
-      const toSave = this.plants.map(p => ({ ...p, photoDataUrl: null }))
+      const toSave = JSON.parse(JSON.stringify(
+        this.plants.map(p => ({ ...p, photoDataUrl: null }))
+      ))
       await set(IDB_KEY, toSave)
     },
 
