@@ -2,6 +2,7 @@ import type { PlantIdResult } from '~/types'
 
 export function usePlantId() {
   const config = useRuntimeConfig()
+  const { t } = useI18n()
   const loading = ref(false)
   const error = ref<string | null>(null)
   const results = ref<PlantIdResult[]>([])
@@ -20,15 +21,25 @@ export function usePlantId() {
 
       const apiKey = config.public.plantnetApiKey
       if (!apiKey || apiKey === 'your_plantnet_key_here') {
-        throw new Error('Clé API PlantNet manquante — configure NUXT_PUBLIC_PLANTNET_API_KEY dans .env')
+        throw new Error('NO_API_KEY')
       }
       const url = `https://my-api.plantnet.org/v2/identify/all?api-key=${encodeURIComponent(apiKey)}&include-related-images=true`
-      const res = await fetch(url, { method: 'POST', body: form })
+
+      let res: Response
+      try {
+        res = await fetch(url, { method: 'POST', body: form })
+      } catch {
+        throw new Error('NETWORK_ERROR')
+      }
 
       if (!res.ok) {
-        if (res.status === 401) throw new Error('Clé API PlantNet invalide (401) — vérifie NUXT_PUBLIC_PLANTNET_API_KEY dans .env')
-        const body = await res.text().catch(() => '')
-        throw new Error(`PlantNet ${res.status}: ${body}`)
+        if (res.status === 401) throw new Error('INVALID_KEY')
+        if (res.status === 404) {
+          results.value = []
+          return []
+        }
+        console.error(`PlantNet error ${res.status}:`, await res.text().catch(() => ''))
+        throw new Error('SERVER_ERROR')
       }
 
       const data = await res.json()
@@ -41,7 +52,12 @@ export function usePlantId() {
       }))
       return results.value
     } catch (e: any) {
-      error.value = e.message ?? 'Identification failed'
+      const code = e.message
+      if (code === 'NO_API_KEY')    error.value = t('identify.error_no_api_key')
+      else if (code === 'INVALID_KEY')   error.value = t('identify.error_invalid_key')
+      else if (code === 'NETWORK_ERROR') error.value = t('identify.error_network')
+      else if (code === 'SERVER_ERROR')  error.value = t('identify.error_server')
+      else                               error.value = t('identify.error_generic')
       return []
     } finally {
       loading.value = false

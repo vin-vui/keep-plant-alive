@@ -11,19 +11,31 @@
         class="w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all neon-card"
         @click="$emit('select', result)"
       >
-        <img
-          v-if="result.imageUrl"
-          :src="result.imageUrl"
-          class="w-14 h-14 rounded-lg object-cover shrink-0"
-          :style="{ border: '1px solid var(--c-border)' }"
-          :alt="result.scientificName"
-        />
-        <div
-          v-else
-          class="w-14 h-14 rounded-lg flex items-center justify-center shrink-0"
-          :style="{ background: 'var(--c-deep)', border: '1px solid var(--c-border-lo)' }"
-        >
-          <Icon name="streamline:leaf" class="text-2xl" :style="{ color: 'var(--c-border)' }" />
+        <div class="shrink-0 relative">
+          <img
+            v-if="result.imageUrl"
+            :src="result.imageUrl"
+            class="w-20 h-20 rounded-xl object-cover"
+            :style="{ border: '1px solid var(--c-border)' }"
+            :alt="result.scientificName"
+            @click.stop="lightboxUrl = result.imageUrl"
+          />
+          <div
+            v-else
+            class="w-20 h-20 rounded-xl flex items-center justify-center"
+            :style="{ background: 'var(--c-deep)', border: '1px solid var(--c-border-lo)' }"
+          >
+            <Icon name="streamline:leaf" class="text-3xl" :style="{ color: 'var(--c-border)' }" />
+          </div>
+          <!-- zoom hint -->
+          <div
+            v-if="result.imageUrl"
+            class="absolute bottom-1 right-1 rounded-full p-0.5"
+            :style="{ background: 'var(--c-glass)' }"
+            @click.stop="lightboxUrl = result.imageUrl"
+          >
+            <Icon name="streamline:interface-zoom-in-expand-magnify-glass-search-zoom" class="text-xs" :style="{ color: 'var(--c-muted)' }" />
+          </div>
         </div>
         <div class="min-w-0 flex-1">
           <p class="font-medium text-sm truncate italic" :style="{ color: 'var(--c-text)', fontFamily: 'var(--font-data)' }">
@@ -58,6 +70,30 @@
         {{ $t('identify.manual') }}
       </button>
     </div>
+
+    <!-- Lightbox overlay -->
+    <Teleport to="body">
+      <div
+        v-if="lightboxUrl"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4"
+        style="background: rgba(0,0,0,0.85); backdrop-filter: blur(4px)"
+        @click="lightboxUrl = null"
+      >
+        <img
+          :src="lightboxUrl"
+          class="max-w-full max-h-full rounded-2xl object-contain"
+          style="max-height: 80vh; box-shadow: 0 0 40px rgba(0,0,0,0.5)"
+          @click.stop
+        />
+        <button
+          class="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center"
+          :style="{ background: 'var(--c-glass)', border: '1px solid var(--c-border)', color: 'var(--c-text)' }"
+          @click="lightboxUrl = null"
+        >
+          <Icon name="streamline:interface-delete-1-remove-add-button-plus-cross-delete-x-mathematics" />
+        </button>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -66,4 +102,6 @@ import type { PlantIdResult } from '~/types'
 
 defineProps<{ results: PlantIdResult[]; loading?: boolean }>()
 defineEmits(['select', 'manual'])
+
+const lightboxUrl = ref<string | null>(null)
 </script>

@@ -31,6 +31,16 @@ watch(isDark, (dark) => {
   document.documentElement.classList.toggle('dark', dark)
 }, { immediate: true })
 
+onMounted(async () => {
+  if (settings.locationLat === null) {
+    const pos = await settings.detectLocation()
+    if (pos) {
+      const { fetchWeather } = useWeather()
+      fetchWeather(pos.lat, pos.lon)
+    }
+  }
+})
+
 useHead({
   title: 'Keep Plant Alive',
   meta: [
@@ -38,12 +48,14 @@ useHead({
     { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' },
     { name: 'mobile-web-app-capable', content: 'yes' },
     { name: 'apple-mobile-web-app-capable', content: 'yes' },
-    { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
+    { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+    { name: 'apple-mobile-web-app-title', content: 'PlantCare' },
     { name: 'theme-color', content: '#16a34a' }
   ],
   link: [
     { rel: 'icon', type: 'image/png', href: '/icons/favicon.png' },
-    { rel: 'apple-touch-icon', href: '/icons/pwa-192x192.png' }
+    { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+    { rel: 'apple-touch-icon', sizes: '192x192', href: '/apple-touch-icon.png' }
   ]
 })
 </script>

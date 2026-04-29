@@ -28,6 +28,16 @@
         </span>
       </div>
 
+      <!-- Urgency badge — only when action needed -->
+      <div v-if="urgency !== 'ok'" class="absolute top-2 right-2">
+        <span
+          class="text-xs font-medium px-2 py-0.5 rounded-full uppercase tracking-wider"
+          :style="urgencyBadge"
+        >
+          {{ urgencyLabel }}
+        </span>
+      </div>
+
       <!-- Watering ring -->
       <div class="absolute bottom-2 right-2">
         <WateringRing :progress="ringProgress" :color="ringColor" :size="40" />
@@ -36,44 +46,32 @@
 
     <!-- Info -->
     <div class="p-3">
-      <div class="flex items-start justify-between gap-1">
-        <div class="min-w-0">
-          <p class="font-semibold text-sm truncate uppercase tracking-wide" :style="{ color: 'var(--c-text)' }">
-            {{ plant.name }}
-          </p>
-          <p
-            v-if="plant.scientificName"
-            class="text-xs italic truncate"
-            :style="{ color: 'var(--c-muted)', fontFamily: 'var(--font-data)' }"
-          >
-            {{ plant.scientificName }}
-          </p>
-        </div>
-        <span
-          class="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full uppercase tracking-wider"
-          :style="urgencyBadge"
-        >
-          {{ urgencyLabel }}
-        </span>
-      </div>
+      <p class="font-semibold text-sm truncate uppercase tracking-wide" :style="{ color: 'var(--c-text)' }">
+        {{ plant.name }}
+      </p>
+      <p
+        v-if="plant.scientificName"
+        class="text-xs italic truncate mb-2"
+        :style="{ color: 'var(--c-muted)', fontFamily: 'var(--font-data)' }"
+      >
+        {{ plant.scientificName }}
+      </p>
+      <p v-else class="mb-2" />
 
-      <!-- Next watering -->
-      <div class="mt-2 flex items-center justify-between">
-        <span class="text-xs" :style="{ color: 'var(--c-muted)' }">{{ nextLabel }}</span>
-        <button
-          class="water-btn text-xs px-3 py-1 rounded-full font-medium transition-all uppercase tracking-wider"
-          @click.stop="$emit('water')"
-        >
-          {{ $t('plants.water_now') }}
-        </button>
-      </div>
+      <!-- Full-width water button -->
+      <button
+        class="water-btn w-full py-2 rounded-lg flex items-center justify-center gap-1.5 text-xs font-medium uppercase tracking-wider transition-all"
+        @click.stop="$emit('water')"
+      >
+        <Icon name="streamline:interface-weather-rain-drop-drops-rain-rainy-meteorology-water-precipitation-weather" class="text-sm" />
+        {{ $t('plants.water_now') }}
+      </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { getWateringUrgency, urgencyBadgeStyle, urgencyRingColor } from '~/utils/wateringLogic'
-import { daysUntil } from '~/utils/dateUtils'
 import type { Plant } from '~/types'
 
 const props = defineProps<{ plant: Plant }>()
@@ -81,17 +79,10 @@ defineEmits(['click', 'water'])
 
 const { t } = useI18n()
 
-const urgency   = computed(() => getWateringUrgency(props.plant))
+const urgency      = computed(() => getWateringUrgency(props.plant))
 const urgencyBadge = computed(() => urgencyBadgeStyle(urgency.value))
-const ringColor = computed(() => urgencyRingColor(urgency.value))
+const ringColor    = computed(() => urgencyRingColor(urgency.value))
 const urgencyLabel = computed(() => t(`plants.urgency.${urgency.value}`))
-
-const nextLabel = computed(() => {
-  const days = daysUntil(props.plant.nextWateringAt)
-  if (days < 0)  return `${Math.abs(days)} ${t('common.days')}`
-  if (days === 0) return t('plants.urgency.today')
-  return `J+${days}`
-})
 
 const ringProgress = computed(() => {
   if (!props.plant.lastWateredAt || !props.plant.nextWateringAt) return 0

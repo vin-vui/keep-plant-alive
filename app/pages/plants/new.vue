@@ -31,15 +31,27 @@
     </div>
 
     <!-- Step 2: Results -->
-    <div v-else-if="step === 'results'">
+    <div v-else-if="step === 'results'" class="space-y-4">
+      <!-- User's photo for comparison -->
+      <div v-if="photoThumbnail" class="flex items-center gap-3 px-1">
+        <img
+          :src="photoThumbnail"
+          class="w-16 h-16 rounded-xl object-cover shrink-0"
+          :style="{ border: '1px solid var(--c-border)' }"
+          alt="votre plante"
+        />
+        <p class="text-xs uppercase tracking-wider" :style="{ color: 'var(--c-muted)' }">
+          {{ $t('identify.your_photo') }}
+        </p>
+      </div>
       <PlantIdentifier :results="idResults" :loading="identifying" @select="onResultSelected" @manual="goManual" />
     </div>
 
     <!-- Step 3: Confirm -->
     <div v-else-if="step === 'confirm'" class="space-y-4">
       <!-- Thumbnail preview -->
-      <div class="w-24 h-24 rounded-2xl overflow-hidden mx-auto neon-border" :style="{ background: 'var(--c-deep)' }">
-        <img v-if="photoThumbnail" :src="photoThumbnail" alt="preview" class="w-full h-full object-cover opacity-90" />
+      <div class="w-28 h-28 rounded-2xl overflow-hidden mx-auto neon-border" :style="{ background: 'var(--c-deep)' }">
+        <img v-if="photoThumbnail" :src="photoThumbnail" alt="preview" class="w-full h-full object-cover" />
         <div v-else class="w-full h-full flex items-center justify-center">
           <Icon name="streamline:sprout" class="text-3xl" :style="{ color: 'var(--c-border)' }" />
         </div>
@@ -77,6 +89,13 @@
               {{ n }} {{ $t('common.days') }}
             </option>
           </select>
+          <!-- Suggestion source hint -->
+          <p class="mt-1 text-xs px-1 uppercase tracking-wider" :style="{ color: 'var(--c-faint)' }">
+            <span v-if="form.family && intervalFromFamily">
+              {{ $t('identify.interval_source_family', { family: form.family }) }}
+            </span>
+            <span v-else>{{ $t('identify.interval_source_default') }}</span>
+          </p>
         </div>
 
         <!-- Location toggle -->
@@ -135,7 +154,7 @@
 </template>
 
 <script setup lang="ts">
-import { INTERVAL_OPTIONS, getDefaultWateringProfile } from '~/utils/wateringDefaults'
+import { INTERVAL_OPTIONS, getDefaultWateringProfile, hasFamilyProfile } from '~/utils/wateringDefaults'
 import { computeNextWatering } from '~/utils/wateringLogic'
 import type { PlantIdResult } from '~/types'
 
@@ -150,6 +169,7 @@ const cameraRef     = ref()
 const photoFull     = ref<string | null>(null)
 const photoThumbnail = ref<string | null>(null)
 const saving        = ref(false)
+const intervalFromFamily = ref(false)
 
 const form = reactive({
   name: '',
@@ -182,6 +202,7 @@ function onResultSelected(result: PlantIdResult) {
   form.name           = result.commonNames[0] ?? result.scientificName
   const defaults      = getDefaultWateringProfile(result.family)
   form.intervalDays   = defaults.intervalDays
+  intervalFromFamily.value = hasFamilyProfile(result.family)
   step.value          = 'confirm'
 }
 
@@ -189,6 +210,7 @@ function goManual() {
   form.scientificName = null
   form.commonName     = null
   form.family         = null
+  intervalFromFamily.value = false
   step.value          = 'confirm'
 }
 
@@ -213,7 +235,7 @@ async function savePlant() {
     showToast(t('plants.added'))
     router.push('/')
   } catch (e: any) {
-    showToast(e?.message ?? t('common.error'), 'error')
+    showToast(t('common.error'), 'error')
   } finally {
     saving.value = false
   }
