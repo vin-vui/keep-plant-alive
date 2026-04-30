@@ -20,7 +20,7 @@ export function useNotifications() {
     const options: NotificationOptions & { showTrigger?: any } = {
       tag: `water-${plant.id}`,
       body: plant.name,
-      icon: '/icons/pwa-192x192.png',
+      icon: `${useRuntimeConfig().app.baseURL}icons/pwa-192x192.png`,
       data: { plantId: plant.id },
       actions: [{ action: 'watered', title: '✓ Arrosé' }] as any
     }

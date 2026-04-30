@@ -47,6 +47,8 @@ watch(isDark, (dark) => {
 }, { immediate: true })
 
 
+const base = useRuntimeConfig().app.baseURL
+
 useHead({
   title: 'Keep Plant Alive',
   meta: [
@@ -62,9 +64,9 @@ useHead({
     { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
     { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
     { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Share+Tech+Mono&family=Nunito:wght@400;500;600;700;800&display=swap' },
-    { rel: 'icon', type: 'image/png', href: '/icons/favicon.png' },
-    { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
-    { rel: 'apple-touch-icon', sizes: '192x192', href: '/apple-touch-icon.png' }
+    { rel: 'icon', type: 'image/png', href: `${base}icons/favicon.png` },
+    { rel: 'apple-touch-icon', href: `${base}apple-touch-icon.png` },
+    { rel: 'apple-touch-icon', sizes: '192x192', href: `${base}apple-touch-icon.png` }
   ]
 })
 </script>

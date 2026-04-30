@@ -1,8 +1,20 @@
 import tailwindcss from '@tailwindcss/vite'
 
+const isGhPages = process.env.GITHUB_PAGES === 'true'
+const baseURL = isGhPages ? '/keep-plant-alive/' : '/'
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-11-01',
   ssr: false,
+
+  app: {
+    baseURL,
+    buildAssetsDir: 'assets/'
+  },
+
+  nitro: {
+    preset: isGhPages ? 'github_pages' : undefined
+  },
 
   css: ['~/assets/css/main.css'],
 
@@ -42,12 +54,13 @@ export default defineNuxtConfig({
       theme_color: '#16a34a',
       background_color: '#121212',
       display: 'standalone',
-      start_url: '/',
-      id: '/',
+      start_url: baseURL,
+      scope: baseURL,
+      id: baseURL,
       icons: [
-        { src: '/icons/pwa-192x192.png', sizes: '192x192', type: 'image/png' },
-        { src: '/icons/pwa-512x512.png', sizes: '512x512', type: 'image/png' },
-        { src: '/icons/pwa-512x512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+        { src: `${baseURL}icons/pwa-192x192.png`, sizes: '192x192', type: 'image/png' },
+        { src: `${baseURL}icons/pwa-512x512.png`, sizes: '512x512', type: 'image/png' },
+        { src: `${baseURL}icons/pwa-512x512-maskable.png`, sizes: '512x512', type: 'image/png', purpose: 'maskable' }
       ]
     },
     injectManifest: {
