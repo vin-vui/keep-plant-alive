@@ -63,7 +63,25 @@
     "rain_48h": "{mm} mm forecast",
     "temp": "{t}°C",
     "no_location": "Location not set",
-    "skip_active": "Watering skipped: it rained"
+    "skip_active": "Watering skipped: it rained",
+    "forecast_48h": "48h forecast",
+    "updated_at": "Updated",
+    "conditions": {
+      "Clear": "Sunny",
+      "Clouds": "Cloudy",
+      "Rain": "Rain",
+      "Drizzle": "Drizzle",
+      "Thunderstorm": "Thunderstorm",
+      "Snow": "Snow",
+      "Mist": "Mist",
+      "Fog": "Fog",
+      "Haze": "Haze",
+      "Dust": "Dust",
+      "Sand": "Sand",
+      "Ash": "Ash",
+      "Squall": "Squall",
+      "Tornado": "Tornado"
+    }
   },
   "settings": {
     "title": "Settings",

@@ -63,7 +63,25 @@
     "rain_48h": "{mm} mm prévus",
     "temp": "{t}°C",
     "no_location": "Localisation non configurée",
-    "skip_active": "Arrosage ignoré : il a plu"
+    "skip_active": "Arrosage ignoré : il a plu",
+    "forecast_48h": "Prévisions 48h",
+    "updated_at": "Mis à jour",
+    "conditions": {
+      "Clear": "Ensoleillé",
+      "Clouds": "Nuageux",
+      "Rain": "Pluie",
+      "Drizzle": "Bruine",
+      "Thunderstorm": "Orage",
+      "Snow": "Neige",
+      "Mist": "Brume",
+      "Fog": "Brouillard",
+      "Haze": "Brume sèche",
+      "Dust": "Poussière",
+      "Sand": "Sable",
+      "Ash": "Cendres",
+      "Squall": "Rafales",
+      "Tornado": "Tornade"
+    }
   },
   "settings": {
     "title": "Réglages",

@@ -1,11 +1,13 @@
 import type { WeatherSnapshot } from '~/types'
 
-const CACHE_TTL_MS = 60 * 60 * 1000
+const CACHE_TTL_MS = 30 * 60 * 1000
+
+// Module-level loading state shared across all useWeather() calls
+const _loading = ref(false)
 
 export function useWeather() {
   const config = useRuntimeConfig()
   const settingsStore = useSettingsStore()
-  const loading = ref(false)
   const error = ref<string | null>(null)
 
   function isCacheValid(): boolean {
@@ -15,41 +17,47 @@ export function useWeather() {
 
   async function fetchWeather(lat: number, lon: number): Promise<WeatherSnapshot | null> {
     if (isCacheValid()) return settingsStore.weatherSnapshot
-    loading.value = true
+    _loading.value = true
     error.value = null
     try {
       const apiKey = config.public.openweatherApiKey
-      const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${encodeURIComponent(apiKey)}&units=metric&exclude=minutely,alerts`
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 8000)
-      let res: Response
-      try {
-        res = await fetch(url, { signal: controller.signal })
-      } finally {
-        clearTimeout(timeoutId)
-      }
-      if (!res.ok) throw new Error(`OpenWeather ${res.status}`)
-      const data = await res.json()
+      const base = `lat=${lat}&lon=${lon}&appid=${encodeURIComponent(apiKey)}&units=metric`
 
-      const hourly: any[] = data.hourly ?? []
-      const rainLast24hMm  = hourly.slice(0, 24).reduce((s: number, h: any) => s + (h.rain?.['1h'] ?? 0), 0)
-      const rainForecast48hMm = hourly.slice(0, 48).reduce((s: number, h: any) => s + (h.rain?.['1h'] ?? 0), 0)
+      const [currentRes, forecastRes] = await Promise.all([
+        fetch(`https://api.openweathermap.org/data/2.5/weather?${base}`),
+        fetch(`https://api.openweathermap.org/data/2.5/forecast?${base}&cnt=16`)
+      ])
+
+      if (!currentRes.ok) throw new Error(`weather:${currentRes.status}`)
+      if (!forecastRes.ok) throw new Error(`forecast:${forecastRes.status}`)
+
+      const [current, forecast] = await Promise.all([currentRes.json(), forecastRes.json()])
+
+      // rain.1h = mm fallen in the last hour (absent when 0)
+      const rainLast24hMm = Math.round((current.rain?.['1h'] ?? 0) * 10) / 10
+
+      // forecast list = 3h slots; 16 slots = 48h
+      const forecastList: any[] = forecast.list ?? []
+      const rainForecast48hMm = Math.round(
+        forecastList.reduce((s: number, h: any) => s + (h.rain?.['3h'] ?? 0), 0) * 10
+      ) / 10
 
       const snapshot: WeatherSnapshot = {
         fetchedAt: new Date().toISOString(),
         lat, lon,
-        rainLast24hMm: Math.round(rainLast24hMm * 10) / 10,
-        rainForecast48hMm: Math.round(rainForecast48hMm * 10) / 10,
-        conditionMain: data.current?.weather?.[0]?.main ?? '',
-        tempCelsius: Math.round(data.current?.temp ?? 0)
+        rainLast24hMm,
+        rainForecast48hMm,
+        conditionMain: current.weather?.[0]?.main ?? '',
+        tempCelsius: Math.round(current.main?.temp ?? 0)
       }
       await settingsStore.updateWeather(snapshot)
       return snapshot
     } catch (e: any) {
+      console.error('[weather] fetch failed:', e.message)
       error.value = e.message
       return null
     } finally {
-      loading.value = false
+      _loading.value = false
     }
   }
 
@@ -59,5 +67,5 @@ export function useWeather() {
     return fetchWeather(lat, lon)
   }
 
-  return { loading, error, isCacheValid, fetchWeather, refresh }
+  return { loading: _loading, error, isCacheValid, fetchWeather, refresh }
 }

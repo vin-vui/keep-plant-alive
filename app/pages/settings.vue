@@ -8,25 +8,26 @@
       </h2>
       <button
         class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-medium transition-all uppercase tracking-widest neon-border"
-        :style="{ background: 'var(--c-accent-bg)', color: 'var(--c-accent-text)' }"
-        :disabled="detectingLocation"
+        :style="{ background: 'var(--c-accent-bg)', color: 'var(--c-accent-text)', opacity: (detectingLocation || settings.locationDetecting) ? '0.7' : '1' }"
+        :disabled="detectingLocation || settings.locationDetecting"
         @click="detectLocation"
       >
-        <AppSpinner v-if="detectingLocation" size="sm" color="text-brand-500" />
+        <AppSpinner v-if="detectingLocation || settings.locationDetecting" size="sm" color="text-brand-500" />
         <Icon v-else name="streamline:location-pin-3" />
-        {{ detectingLocation ? $t('common.loading') : $t('settings.detect_location') }}
+        {{ (detectingLocation || settings.locationDetecting) ? $t('common.loading') : $t('settings.detect_location') }}
       </button>
-      <div v-if="settings.locationLat !== null" class="text-xs text-center uppercase tracking-wider" :style="{ color: 'var(--c-muted)', fontFamily: 'var(--font-data)' }">
-        {{ settings.locationLat?.toFixed(4) }}, {{ settings.locationLon?.toFixed(4) }}
-        <span v-if="weatherLoading"> · {{ $t('common.loading') }}</span>
+
+      <!-- City name: shown as soon as we have coords, editable -->
+      <div v-if="settings.locationLat !== null || locationName" class="flex items-center gap-2">
+        <Icon name="streamline:location-pin-3" class="text-sm shrink-0" :style="{ color: 'var(--c-muted)' }" />
+        <input
+          v-model="locationName"
+          type="text"
+          class="field-input"
+          :placeholder="settings.locationDetecting ? $t('common.loading') : $t('settings.location_name')"
+          @blur="saveLocationName"
+        />
       </div>
-      <input
-        v-model="locationName"
-        type="text"
-        class="field-input"
-        :placeholder="$t('settings.location_name')"
-        @blur="saveLocationName"
-      />
     </section>
 
     <!-- Rain threshold -->
@@ -145,6 +146,11 @@ const weatherLoading    = ref(false)
 const locationName      = ref(settings.locationName ?? '')
 const rainThreshold     = ref(settings.rainSkipThresholdMm)
 
+// Sync city name if resolved in background (plugin auto-detection)
+watch(() => settings.locationName, (name) => {
+  if (name && !locationName.value) locationName.value = name
+})
+
 const modeOptions = [
   { value: 'cyber',  label: '⚡ Cyber' },
   { value: 'kawaii', label: '🌸 Kawaii' },
@@ -165,27 +171,17 @@ async function detectLocation() {
   try {
     const pos = await settings.detectLocation()
     if (pos) {
-      showToast(t('settings.location_detected'))
-      resolveCity(pos.lat, pos.lon)
       weatherLoading.value = true
-      fetchWeather(pos.lat, pos.lon).finally(() => { weatherLoading.value = false })
+      const [city] = await Promise.all([
+        settings.resolveCity(pos.lat, pos.lon, locale.value),
+        fetchWeather(pos.lat, pos.lon).finally(() => { weatherLoading.value = false })
+      ])
+      if (city) locationName.value = city
+      showToast(city ? `${city} · ${t('settings.location_detected')}` : t('settings.location_detected'))
     }
   } finally {
     detectingLocation.value = false
   }
-}
-
-async function resolveCity(lat: number, lon: number) {
-  try {
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`,
-      { headers: { 'Accept-Language': locale.value }, signal: AbortSignal.timeout(6000) }
-    )
-    if (!res.ok) return
-    const data = await res.json()
-    const city = data.address?.city ?? data.address?.town ?? data.address?.village ?? data.address?.county ?? ''
-    if (city) { locationName.value = city; await settings.update({ locationName: city }) }
-  } catch {}
 }
 
 async function saveLocationName() { await settings.update({ locationName: locationName.value || null }) }

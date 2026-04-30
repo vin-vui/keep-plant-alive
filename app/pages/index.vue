@@ -1,5 +1,7 @@
 <template>
   <div>
+    <WeatherCard />
+
     <!-- Rain skip banner -->
     <div
       v-if="rainSkipActive"
@@ -24,7 +26,6 @@ import { shouldSkipDueToRain } from '~/utils/wateringLogic'
 const plantsStore    = usePlantsStore()
 const settingsStore  = useSettingsStore()
 const { water }      = useWateringSchedule()
-const { refresh: refreshWeather } = useWeather()
 const { show: showToast } = useToast()
 const { t } = useI18n()
 
@@ -40,7 +41,4 @@ async function handleWater(plantId: string) {
   showToast(t('plants.watered'))
 }
 
-onMounted(() => {
-  if (settingsStore.locationLat !== null) refreshWeather()
-})
 </script>

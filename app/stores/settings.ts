@@ -15,8 +15,15 @@ const defaults: AppSettings = {
   weatherFetchedAt: null
 }
 
+// Module-level ref: transient, not persisted to IDB
+const _locationDetecting = ref(false)
+
 export const useSettingsStore = defineStore('settings', {
   state: (): AppSettings => ({ ...defaults }),
+
+  getters: {
+    locationDetecting: () => _locationDetecting.value
+  },
 
   actions: {
     async load() {
@@ -25,7 +32,7 @@ export const useSettingsStore = defineStore('settings', {
     },
 
     async save() {
-      await set(IDB_KEY, this.$state)
+      await set(IDB_KEY, JSON.parse(JSON.stringify(this.$state)))
     },
 
     async update(updates: Partial<AppSettings>) {
@@ -40,19 +47,42 @@ export const useSettingsStore = defineStore('settings', {
     },
 
     async detectLocation(): Promise<{ lat: number; lon: number } | null> {
+      _locationDetecting.value = true
       return new Promise((resolve) => {
-        if (!navigator.geolocation) { resolve(null); return }
+        if (!navigator.geolocation) {
+          _locationDetecting.value = false
+          resolve(null)
+          return
+        }
         navigator.geolocation.getCurrentPosition(
           async (pos) => {
             const lat = pos.coords.latitude
             const lon = pos.coords.longitude
             await this.update({ locationLat: lat, locationLon: lon })
+            _locationDetecting.value = false
             resolve({ lat, lon })
           },
-          () => resolve(null),
+          () => {
+            _locationDetecting.value = false
+            resolve(null)
+          },
           { timeout: 10000 }
         )
       })
+    },
+
+    async resolveCity(lat: number, lon: number, lang = 'fr'): Promise<string | null> {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`,
+          { headers: { 'Accept-Language': lang }, signal: AbortSignal.timeout(6000) }
+        )
+        if (!res.ok) return null
+        const data = await res.json()
+        const city = data.address?.city ?? data.address?.town ?? data.address?.village ?? data.address?.county ?? null
+        if (city) await this.update({ locationName: city })
+        return city
+      } catch { return null }
     }
   }
 })

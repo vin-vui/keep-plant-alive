@@ -4,11 +4,8 @@
     class="flex items-center gap-1 text-xs"
     :style="{ color: 'var(--c-accent2-text)', fontFamily: 'var(--font-data)' }"
   >
-    <Icon :name="weatherIcon" class="text-base" />
+    <Icon :name="weatherIcon" class="text-base shrink-0" />
     <span>{{ snapshot.tempCelsius }}°</span>
-    <span v-if="snapshot.rainLast24hMm > 0">
-      {{ $t('weather.rain_24h', { mm: snapshot.rainLast24hMm }) }}
-    </span>
   </div>
 </template>
 
