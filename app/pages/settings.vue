@@ -70,26 +70,6 @@
       </button>
     </section>
 
-    <!-- Theme -->
-    <section class="rounded-2xl p-4 space-y-3 neon-card">
-      <h2 class="font-semibold text-sm uppercase tracking-widest" :style="{ color: 'var(--c-muted)' }">
-        {{ $t('settings.theme') }}
-      </h2>
-      <div class="flex gap-2">
-        <button
-          v-for="opt in themeOptions"
-          :key="opt.value"
-          class="flex-1 py-2 rounded-xl text-sm font-medium transition-all uppercase tracking-wider"
-          :style="settings.theme === opt.value
-            ? `background:var(--c-accent-bg);border:1px solid var(--c-accent-border);color:var(--c-accent-text);box-shadow:var(--c-accent-shadow)`
-            : `background:var(--c-card);border:1px solid var(--c-ghost-border);color:var(--c-ghost-text)`"
-          @click="setTheme(opt.value as 'light' | 'dark' | 'system')"
-        >
-          {{ $t(opt.label) }}
-        </button>
-      </div>
-    </section>
-
     <!-- Visual mode -->
     <section class="rounded-2xl p-4 space-y-3 neon-card">
       <h2 class="font-semibold text-sm uppercase tracking-widest" :style="{ color: 'var(--c-muted)' }">
@@ -160,12 +140,6 @@ function setMode(m: 'cyber' | 'kawaii') {
   if (m !== themeMode.value) toggleMode()
 }
 
-const themeOptions = [
-  { value: 'light',  label: 'settings.theme_light' },
-  { value: 'dark',   label: 'settings.theme_dark' },
-  { value: 'system', label: 'settings.theme_system' },
-]
-
 async function detectLocation() {
   detectingLocation.value = true
   try {
@@ -196,7 +170,4 @@ async function toggleNotifications() {
   }
 }
 
-async function setTheme(theme: 'light' | 'dark' | 'system') {
-  await settings.update({ theme })
-}
 </script>

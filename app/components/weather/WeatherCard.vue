@@ -13,7 +13,7 @@
 
   <div
     v-else-if="snapshot"
-    class="mx-4 mt-1 rounded-2xl p-4 fade-in"
+    class="mx-4 mt-1 rounded-2xl px-4 py-2 fade-in"
     :style="{ background: 'var(--c-card)', border: '1px solid var(--c-border)' }"
   >
     <!-- Top row: city + condition + temp -->
@@ -29,45 +29,33 @@
         <div class="flex items-center gap-2">
           <Icon :name="weatherIcon" class="text-2xl shrink-0" :style="{ color: 'var(--c-accent2-text)' }" />
           <span
-            class="text-xl font-semibold"
+            class="text-xl font-semibold mt-1"
             :style="{ color: 'var(--c-text)', fontFamily: 'var(--font-data)' }"
           >
             {{ snapshot.tempCelsius }}°C
-          </span>
-          <span class="text-sm" :style="{ color: 'var(--c-muted)' }">
-            {{ conditionLabel }}
           </span>
         </div>
       </div>
 
       <!-- Rain indicators -->
-      <div class="shrink-0 flex flex-col items-end gap-1 text-xs" :style="{ fontFamily: 'var(--font-data)' }">
-        <div class="flex items-center gap-1" :style="{ color: snapshot.rainLast24hMm > 0 ? 'var(--c-accent2-text)' : 'var(--c-faint)' }">
-          <Icon name="streamline:interface-weather-rain-1-cloud-rain-rainy-meteorology-precipitation-weather" class="text-sm" />
-          <span>{{ snapshot.rainLast24hMm > 0 ? `${snapshot.rainLast24hMm} mm` : '—' }}</span>
-          <span class="opacity-60">(24h)</span>
+      <div class="shrink-0 flex flex-col items-end gap-0.5 text-xs">
+        <div :style="{ color: snapshot.rainLast24hMm > 0 ? 'var(--c-accent2-text)' : 'var(--c-muted)' }">
+          {{ rainPastLabel }} <span :style="{ fontFamily: 'var(--font-data)' }">{{ snapshot.rainLast24hMm }} mm</span>
         </div>
-        <div class="flex items-center gap-1" :style="{ color: snapshot.rainForecast48hMm > 0 ? 'var(--c-accent2-text)' : 'var(--c-faint)' }">
-          <Icon name="streamline:interface-weather-rain-drops-meteorology-rain-drop-water-weather-rainy" class="text-sm" />
-          <span>{{ snapshot.rainForecast48hMm > 0 ? `${snapshot.rainForecast48hMm} mm` : '—' }}</span>
-          <span class="opacity-60">(48h)</span>
+        <div :style="{ color: snapshot.rainForecast48hMm > 0 ? 'var(--c-accent2-text)' : 'var(--c-muted)' }">
+          {{ rainForecastLabel }} <span :style="{ fontFamily: 'var(--font-data)' }">{{ snapshot.rainForecast48hMm }} mm</span>
         </div>
       </div>
     </div>
-
-    <!-- Updated at -->
-    <p class="mt-2 text-xs text-right" :style="{ color: 'var(--c-faint)', fontFamily: 'var(--font-data)' }">
-      {{ $t('weather.updated_at') }} {{ updatedAt }}
-    </p>
   </div>
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
-const settingsStore        = useSettingsStore()
-const { loading }          = useWeather()
-const snapshot             = computed(() => settingsStore.weatherSnapshot)
-const locationName         = computed(() => settingsStore.locationName)
+const { locale } = useI18n()
+const settingsStore = useSettingsStore()
+const { loading }   = useWeather()
+const snapshot      = computed(() => settingsStore.weatherSnapshot)
+const locationName  = computed(() => settingsStore.locationName)
 
 const WEATHER_ICONS: Record<string, string> = {
   Clear:        'streamline:brightness-1',
@@ -85,15 +73,14 @@ const weatherIcon = computed(() =>
   ?? 'streamline:interface-weather-celsius-degrees-temperature-centigrade-celsius-degree-weather'
 )
 
-const conditionLabel = computed(() => {
-  const key = snapshot.value?.conditionMain
-  if (!key) return ''
-  return t(`weather.conditions.${key}`, key)
-})
-
-const updatedAt = computed(() => {
-  const d = snapshot.value?.fetchedAt
-  if (!d) return ''
-  return new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-})
+const RAIN_PAST_LABELS: Record<string, string> = {
+  fr: 'Pluie tombée ',
+  en: 'Rainfall:',
+}
+const RAIN_FORECAST_LABELS: Record<string, string> = {
+  fr: 'Pluie prévue ',
+  en: 'Rain forecast:',
+}
+const rainPastLabel = computed(() => RAIN_PAST_LABELS[locale.value] ?? RAIN_PAST_LABELS.fr)
+const rainForecastLabel = computed(() => RAIN_FORECAST_LABELS[locale.value] ?? RAIN_FORECAST_LABELS.fr)
 </script>
